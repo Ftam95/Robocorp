@@ -143,12 +143,22 @@ for article in articles:
 
     article_data['Description'] = description
 
-    count = count_occurrences(title, search_phrase) + count_occurrences(description, search_phrase)
-    article_data['Search Phrase Count'] = count
+    try:
+        count = count_occurrences(title, search_phrase) + count_occurrences(description, search_phrase)
+        
+    except Exception as e:
+        count = 0
+    article_data['Search Phrase Count'] = count   
+
     
     # Check if e title / description contains any amount of money
-    contains_money_flag = contains_money(title) or contains_money(description)
-    article_data['Contains Money'] = contains_money_flag
+    try:
+        contains_money_flag = contains_money(title) or contains_money(description)
+        
+    except Exception as e:
+        contains_money_flag = False
+    article_data['Contains Money'] = contains_money_flag   
+
 
     # Get the description
     try:
