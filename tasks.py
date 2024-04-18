@@ -18,6 +18,8 @@ import pandas as pd
 service = Service(executable_path="chromedriver.exe")
 driver = webdriver.Chrome(service=service)
 
+logging.info("Started")
+
 folder_Download = r"DownloadFolder"
 if not os.path.exists(folder_Download):
     os.makedirs(folder_Download)
