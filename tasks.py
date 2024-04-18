@@ -53,7 +53,7 @@ print("Done")
 # checkbox = span_element.find_element(By.XPATH, "./preceding-sibling::input[@type='checkbox']")
 # checkbox.click()
 
-time.sleep(100)
+# time.sleep(100)
 
 articles = driver.find_elements(By.XPATH, "//ps-promo")
 print(f"Found {len(articles)} articles.")
