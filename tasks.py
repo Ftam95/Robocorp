@@ -13,6 +13,7 @@ from urllib.parse import urlparse, parse_qs
 import requests
 import time
 import logging
+from selenium.common.exceptions import TimeoutException,NoSuchElementException, WebDriverException
 import re, os
 import pandas as pd
 import json
@@ -78,10 +79,21 @@ def wait_for_element(driver, locator, timeout=10):
 
 search_button.click()
 
-print("Clicked Search")
-input_element = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[data-element='search-form-input']")))
-input_element.send_keys(search_phrase+Keys.ENTER)
-print("Done")
+try:
+    input_element = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[data-element='search-form-input']")))
+    input_element.send_keys(search_phrase+Keys.ENTER)
+    print("Done")
+except TimeoutException:
+    print("Timeout: The input element is not clickable within the specified timeout period.")
+except NoSuchElementException:
+    print("Element not found: The input element does not exist on the page.")
+except WebDriverException as e:
+    logging.error("Crashed "+e)
+
+# print("Clicked Search")
+# input_element = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[data-element='search-form-input']")))
+# input_element.send_keys(search_phrase+Keys.ENTER)
+# print("Done")
 
 select_element = driver.find_element(By.CLASS_NAME, "select-input")
 select_element.click()
@@ -103,12 +115,15 @@ contains_money_list = []
 for article in articles:
     # Extract title
     article_data = {}
-    title_element = article.find_element(By.XPATH, ".//h3[@class='promo-title']/a")
-    title = title_element.text.strip()
-    article_data['Title'] = title
-    print("Title:", title)
     
-    # Extract date
+    try:
+        title_element = article.find_element(By.XPATH, ".//h3[@class='promo-title']/a")
+        title = title_element.text.strip()        
+        print("Title:", title)
+    except Exception as e:
+        title = "Title not found"
+    article_data['Title'] = title
+
     try:
         date_element = article.find_element(By.XPATH, ".//p[@class='promo-timestamp']")
         date = date_element.text.strip()
