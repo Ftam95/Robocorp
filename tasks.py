@@ -182,4 +182,4 @@ df.to_excel(excel_file, index=False)
 
 
 # Close the browser
-#driver.quit()
+driver.quit()
