@@ -90,7 +90,7 @@ newest_option = driver.find_element(By.XPATH, "//option[@value='1']")  # Assumin
 newest_option.click()
 
 
-time.sleep(100)
+#time.sleep(100)
 
 articles = driver.find_elements(By.XPATH, "//ps-promo")
 print(f"Found {len(articles)} articles.")
