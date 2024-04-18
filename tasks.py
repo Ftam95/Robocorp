@@ -13,10 +13,18 @@ import time
 import logging
 import re, os
 import pandas as pd
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.options import Options
 
+options = Options()
+options.add_argument("--headless")
+options.add_argument("--no-sandbox")
 
-service = Service(executable_path="chromedriver.exe")
-driver = webdriver.Chrome(service=service)
+# Use the pre-installed ChromeDriver in the Docker image
+service = Service(executable_path="/usr/bin/chromedriver")
+
+driver = webdriver.Chrome(service=service, options=options)
 
 logging.info("Started")
 
