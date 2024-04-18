@@ -31,6 +31,23 @@ def read_config(configfile):
         data = json.load(config_file)
     return data
 
+def count_occurrences(string, search_phrase):
+    return string.lower().count(search_phrase.lower())
+
+def contains_money(string):
+    # Define possible formats for money
+    money_formats = [
+        r"\$\d+(\.\d{1,2})?",  # $11.1 or $111,111.11
+        r"\d+ dollars",  # 11 dollars
+        r"\d+ USD"  # 11 USD
+    ]
+    
+    # Check if the string contains any of the money formats
+    for money_format in money_formats:
+        if re.search(money_format, string, re.IGNORECASE):
+            return True
+    return False
+
 # service = Service(executable_path="chromedriver.exe")
 # driver = webdriver.Chrome(service=service)
 
@@ -114,6 +131,22 @@ for article in articles:
 
     article_data['Description'] = description
 
+    try:
+        count = count_occurrences(title, search_phrase) + count_occurrences(description, search_phrase)
+        
+    except Exception as e:
+        count = 0
+    article_data['Search Phrase Count'] = count   
+
+    print("test money flag")
+    # Check if e title / description contains any amount of money
+    try:
+        contains_money_flag = contains_money(title) or contains_money(description)
+        
+    except Exception as e:
+        contains_money_flag = False
+    article_data['Contains Money'] = contains_money_flag
+
     # Get the description
     try:
         picture_element = article.find_element(By.XPATH, ".//img[@class='image']")
@@ -178,29 +211,10 @@ for article in articles:
 df = pd.DataFrame(articles_data)
 
 # Write DataFrame to an Excel file
-excel_file = os.path.join(folder_Download, "articles_data.xlsx")
+excel_file = os.path.join(folder_Download, search_phrase+".xlsx")
 df.to_excel(excel_file, index=False)
-
-        
-
-# Parse the URL
-
-
-# Get the filename from the path
-
-
-    # Get the picture URL
-    # picture_url = picture_element.get_attribute("src")
-
-    # print("Picture Description:", picture_description)
-    # print("Picture URL:", picture_url)
-    
-    # Log the extracted data
-    # print("Title:", title)
-    # print("Date Published:", date)
-    # print("Description:", description)
-    #print("Picture URL:", picture_url)    
-
 
 # Close the browser
 driver.quit()
+
+
