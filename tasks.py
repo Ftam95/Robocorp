@@ -1,5 +1,4 @@
-
-from robotframework_deco import task
+from rpaframework.task import task
 from selenium import webdriver 
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
@@ -188,4 +187,4 @@ def my_task():
 
 
 # Close the browser
-driver.quit()
+    driver.quit()
