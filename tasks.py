@@ -28,7 +28,7 @@ driver = webdriver.Chrome(service=service, options=options)
 
 logging.info("Started")
 
-folder_Download = r"output"
+folder_Download = r"/output"
 if not os.path.exists(folder_Download):
     os.makedirs(folder_Download)
 driver.get("https://www.latimes.com/")
@@ -157,7 +157,7 @@ for article in articles:
 df = pd.DataFrame(articles_data)
 
 # Write DataFrame to an Excel file
-excel_file = "articles_data.xlsx"
+excel_file = os.path.join(folder_Download, "articles_data.xlsx")
 df.to_excel(excel_file, index=False)
 
         
