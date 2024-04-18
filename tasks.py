@@ -28,7 +28,7 @@ driver = webdriver.Chrome(service=service, options=options)
 
 logging.info("Started")
 
-folder_Download = r"DownloadFolder"
+folder_Download = r"output"
 if not os.path.exists(folder_Download):
     os.makedirs(folder_Download)
 driver.get("https://www.latimes.com/")
