@@ -1,53 +1,33 @@
-import os
-import json
-import re
-import requests
-import logging
-import time
-import pandas as pd
-from urllib.parse import urlparse, parse_qs
-from selenium import webdriver
+from selenium import webdriver 
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from urllib.parse import urlparse, parse_qs
+import requests
+import time
+import logging
+import re, os, json
+import pandas as pd
 from selenium.webdriver.chrome.options import Options
 
-class LatimesArticleScraper:
-    def __init__(self, config_file='config.json'):
-        self.config_data = self.read_config(config_file)
+class LaTimes:
+    def __init__(self, config_file_path='config.json'):
+        self.config_data = self.read_config(config_file_path)
         self.search_phrase = self.config_data['search_phrase']
-        self.folder_download = "output"
-        self.setup_logging()
-        self.setup_driver()
+        self.number_of_months = self.config_data['number_of_months']
+        self.articles_data = []
 
-    def read_config(self, config_file):
-        with open(config_file, 'r') as config_file:
+        # Setting up the Selenium WebDriver
+        self.service = Service(executable_path="chromedriver.exe")
+        self.driver = webdriver.Chrome(service=self.service)
+        self.wait = WebDriverWait(self.driver, 10)  # Wait up to 10 seconds
+
+    def read_config(self, configfile):
+        with open(configfile, 'r') as config_file:
             data = json.load(config_file)
         return data
-
-    def setup_logging(self):
-        if not os.path.exists(self.folder_download):
-            os.makedirs(self.folder_download)
-        logging.basicConfig(filename='scraper.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-
-    def setup_driver(self):
-        options = Options()
-        options.add_argument("--headless")
-        options.add_argument("--no-sandbox")
-
-        service = Service(executable_path="/usr/bin/chromedriver")
-        self.driver = webdriver.Chrome(service=service, options=options)
-
-        #Runnin glocal
-        #service = Service(executable_path="chromedriver.exe")
-        #self.driver = webdriver.Chrome(service=service)
-        self.driver.set_window_size(1920, 1080)
-        
-
-    def wait_for_element(self, locator, timeout=10):
-        return WebDriverWait(self.driver, timeout).until(EC.presence_of_element_located(locator))
 
     def count_occurrences(self, string, search_phrase):
         return string.lower().count(search_phrase.lower())
@@ -55,7 +35,7 @@ class LatimesArticleScraper:
     def contains_money(self, string):
         # Define possible formats for money
         money_formats = [
-            r"\$\d+(\.\d{1,2})?",  # $11.1
+            r"\$\d+(\.\d{1,2})?",  # $11.1 or $111,111.11
             r"\d+ dollars",         # 11 dollars
             r"\d+ USD"              # 11 USD
         ]
@@ -66,42 +46,49 @@ class LatimesArticleScraper:
                 return True
         return False
 
-    def scrape_articles(self):
+    def scrape(self):
+        logging.info("Started")
+        folder_Download = r"output"
+        if not os.path.exists(folder_Download):
+            os.makedirs(folder_Download)
+        
         self.driver.get("https://www.latimes.com/")
-        search_button = self.wait_for_element((By.CSS_SELECTOR, "button[data-element='search-button']"))
+        self.driver.set_window_size(1920, 1080)
+
+        search_button = self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "button[data-element='search-button']")))
         search_button.click()
 
-        input_element = self.wait_for_element((By.CSS_SELECTOR, "input[data-element='search-form-input']"))
-        input_element.send_keys(self.search_phrase + Keys.ENTER)
+        input_element = self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[data-element='search-form-input']")))
+        input_element.send_keys(self.search_phrase+Keys.ENTER)
 
         select_element = self.driver.find_element(By.CLASS_NAME, "select-input")
         select_element.click()
 
-        newest_option = self.driver.find_element(By.XPATH, "//option[@value='1']")  # Optioon 1 is the Newest. Option 0 relevance
+        newest_option = self.driver.find_element(By.XPATH, "//option[@value='1']")  # Assuming '1' is for "Newest"
         newest_option.click()
 
         time.sleep(10)
 
         articles = self.driver.find_elements(By.XPATH, "//ps-promo")
+        print(f"Found {len(articles)} articles.")
         logging.info(f"Found {len(articles)} articles.")
 
-        articles_data = []
+        # Extract data for each article
         for article in articles:
             article_data = {}
-            #Get Title
             title_element = article.find_element(By.XPATH, ".//h3[@class='promo-title']/a")
             title = title_element.text.strip()
             article_data['Title'] = title
-            
+
             try:
                 date_element = article.find_element(By.XPATH, ".//p[@class='promo-timestamp']")
                 date = date_element.text.strip()
             except Exception as e:
                 date = "Date Not Found"
             article_data['Date'] = date
-
+            
             try:
-                description_element = self.wait_for_element((By.XPATH, ".//p[contains(@class, 'promo-description')]"))
+                description_element = article.find_element(By.XPATH, ".//p[contains(@class, 'promo-description')]")
                 description = description_element.text.strip()
             except Exception as e:
                 description = "Description not available"
@@ -122,42 +109,43 @@ class LatimesArticleScraper:
                 parsed_url = urlparse(picture_src)
                 picture_filename_download = parsed_url.path.split("/")[-1]
                 
-                response = requests.get(picture_src)
-                if response.status_code == 200:
+                try:
+                    response = requests.get(picture_src)
                     query_params = parse_qs(parsed_url.query)
+
                     if 'url' in query_params:
                         picture_url = query_params['url'][0]
                         parsed_picture_url = urlparse(picture_url)
                         path = parsed_picture_url.path
                         match = re.search(r'/([^/]+\.(?:jpg|jpeg|png|gif))$', path)
+        
                         if match:
                             picture_filename = match.group(1)
-                            output_file_path = os.path.join(self.folder_download, picture_filename)
-                            with open(output_file_path, "wb") as file:
-                                file.write(response.content)
-                            article_data['File Name'] = picture_filename
+                            if response.status_code == 200:
+                                output_file_path = os.path.join(folder_Download, picture_filename)
+                                with open(output_file_path, "wb") as file:
+                                    file.write(response.content)
+                            else:
+                                print("Failed to download image." + str(response.status_code))
                         else:
                             picture_filename = "Filename not found"
                     else:
                         picture_filename = "URL parameter 'url' not found"
-                else:
-                    picture_filename = "Failed to download image." + str(response.status_code)
-                article_data['File Name'] = picture_filename
+                    
+                    article_data['File Name'] = picture_filename
+                except Exception as e:
+                    print("Error: {}".format(e))
             except Exception as e:
-                logging.error(f"Error processing article: {e}")
+                picture_description = "Picture not available"    
+            
+            self.articles_data.append(article_data)
 
-            articles_data.append(article_data)
-
-        df = pd.DataFrame(articles_data)
-        excel_file = os.path.join(self.folder_download, self.search_phrase + ".xlsx")
+        df = pd.DataFrame(self.articles_data)
+        excel_file = os.path.join(folder_Download, self.search_phrase+".xlsx")
         df.to_excel(excel_file, index=False)
 
-    def close_driver(self):
         self.driver.quit()
 
-if __name__ == "__main__":
-    scraper = LatimesArticleScraper()
-    try:
-        scraper.scrape_articles()
-    finally:
-        scraper.close_driver()
+# Example usage:
+scraper = LaTimes()
+scraper.scrape()
