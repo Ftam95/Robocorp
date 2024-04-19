@@ -156,7 +156,7 @@ class LatimesArticleScraper:
         self.driver.quit()
 
 if __name__ == "__main__":
-    scraper = ArticleScraper()
+    scraper = LatimesArticleScraper()
     try:
         scraper.scrape_articles()
     finally:
