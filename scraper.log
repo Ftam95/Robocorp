@@ -1,0 +1,11 @@
+2024-04-19 09:26:42,727 - INFO - Found 10 articles.
+2024-04-19 09:26:44,081 - ERROR - Error processing article: [Errno 2] No such file or directory: 'output\\3224248f-af7d-474d-9a0f-fd3681a93716.jpeg'
+2024-04-19 09:26:44,934 - ERROR - Error processing article: [Errno 2] No such file or directory: 'output\\mougw-06894-r.jpg'
+2024-04-19 09:26:45,781 - ERROR - Error processing article: [Errno 2] No such file or directory: 'output\\1435579-me-pet-cremation-scam-robert-stewie09-cs.jpg'
+2024-04-19 09:26:46,842 - ERROR - Error processing article: [Errno 2] No such file or directory: 'output\\screenshot-2024-04-01-at-5-31-28-pm.png'
+2024-04-19 09:26:47,927 - ERROR - Error processing article: [Errno 2] No such file or directory: 'output\\1419477-et-0307-comedian-leslie-liao-cmh-01.jpg'
+2024-04-19 09:26:48,868 - ERROR - Error processing article: [Errno 2] No such file or directory: 'output\\0f998ace-ceb9-4526-8540-e90c7d7417ee.jpeg'
+2024-04-19 09:26:50,751 - ERROR - Error processing article: [Errno 2] No such file or directory: 'output\\la-photos-1staff-864992-la-me-va-homeless-housing-32-als.jpg'
+2024-04-19 09:26:51,824 - ERROR - Error processing article: [Errno 2] No such file or directory: 'output\\240416-wideshot-a24civilwar.jpg'
+2024-04-19 09:26:52,782 - ERROR - Error processing article: [Errno 2] No such file or directory: 'output\\hollywood-sign.jpg'
+2024-04-19 09:33:55,348 - INFO - Found 10 articles.
