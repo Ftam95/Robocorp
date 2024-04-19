@@ -30,7 +30,7 @@ class LaTimes:
         self.driver = webdriver.Chrome(service=service, options=options)
         # self.service = Service(executable_path="chromedriver.exe")
         # self.driver = webdriver.Chrome(service=self.service)
-        #self.wait = WebDriverWait(self.driver, 10)  # Wait up to 10 seconds
+        self.wait = WebDriverWait(self.driver, 10)  # Wait up to 10 seconds
 
     def read_config(self, configfile):
         with open(configfile, 'r') as config_file:
