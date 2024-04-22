@@ -15,7 +15,7 @@ def read_config():
     workitems = WorkItems()
 
     # Load the current Work Item
-    work_item = workitems.load_work_item()
+    work_item = workitems.load()
 
     return work_item
 
