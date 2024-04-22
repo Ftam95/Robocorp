@@ -15,7 +15,8 @@ def read_config():
     workitems = WorkItems()
 
     # Load the current Work Item
-    work_item = workitems.load()
+    work_item = workitems.get_work_item_payload()
+    print("pay load >>>>>>>>>>",work_item)
 
     return work_item
 
