@@ -36,14 +36,14 @@ def otomatika():
 
     logging.info("Started")
 
-    work_items = WorkItems()
+    # work_items = WorkItems()
 
-    # Use the work item in the current task
-    with work_items.input as item:
-# Access the payload of the work item
-        search_phrase = item.payload.get('search_phrase')
-        news_category = item.payload.get('news_category')
-        number_of_months = item.payload.get('number_of_months')
+    # # Use the work item in the current task
+    # with work_items.input as item:
+    # # Access the payload of the work item
+    #     search_phrase = item.payload.get('search_phrase')
+    #     news_category = item.payload.get('news_category')
+    #     number_of_months = item.payload.get('number_of_months')
 
 
     folder_Download = r"output"
@@ -53,10 +53,10 @@ def otomatika():
     driver.get("https://www.latimes.com/")
     driver.set_window_size(1920, 1080)
 
-    # config_data = read_config('config.json')
-    # search_phrase = config_data['search_phrase']
-    # news_category = config_data['news_category']
-    # number_of_months = config_data['number_of_months']
+    config_data = read_config('config.json')
+    search_phrase = config_data['search_phrase']
+    news_category = config_data['news_category']
+    number_of_months = config_data['number_of_months']
 
     articles_data = scrape_articles(driver, search_phrase, folder_Download)
 
