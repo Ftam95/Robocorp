@@ -39,7 +39,7 @@ def otomatika():
     work_items = WorkItems()
 
     # Use the work item in the current task
-    with work_items.input as item:
+    with work_items.inputs as item:
     # Access the payload of the work item
         search_phrase = item.payload.get('search_phrase')
         news_category = item.payload.get('news_category')
