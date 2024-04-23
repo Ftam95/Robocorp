@@ -39,10 +39,13 @@ def otomatika():
     workitem = workitems.inputs.current
 
     # Use the work item in the current task
-    config_data = workitem['payload']['input']
-    search_phrase = config_data['search_phrase']
-    news_category = config_data['news_category']
-    number_of_months = config_data['number_of_months']
+    # config_data = workitem["payload"]["input"]
+    # search_phrase = config_data['search_phrase']
+    # news_category = config_data['news_category']
+    # number_of_months = config_data['number_of_months']
+
+    search_phrase =workitem.payload['search_phrase']
+
 
     print("search phrase is >>>>>>>"+search_phrase)
 
