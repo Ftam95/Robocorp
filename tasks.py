@@ -36,14 +36,17 @@ def otomatika():
 
     logging.info("Started")
 
-    work_items = WorkItems()
+    workitems = WorkItems()
+
+    workitem = workitems.load_work_item_by_id(workitems.current_work_item)
 
     # Use the work item in the current task
-    with work_items.inputs as item:
-    # Access the payload of the work item
-        search_phrase = item.payload.get('search_phrase')
-        news_category = item.payload.get('news_category')
-        number_of_months = item.payload.get('number_of_months')
+    config_data = workitem['payload']['input']
+    search_phrase = config_data['search_phrase']
+    news_category = config_data['news_category']
+    number_of_months = config_data['number_of_months']
+
+    print("search phrase is >>>>>>>"+search_phrase)
 
 
     folder_Download = r"output"
