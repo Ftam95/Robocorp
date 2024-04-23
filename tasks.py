@@ -39,8 +39,8 @@ def otomatika():
     workitem = workitems.inputs.current
 
     search_phrase =workitem.payload['search_phrase']
-    number_of_days = workitem.payload['search_phrase']
-    logging("search phrase is >>>>>>>"+search_phrase)
+    number_of_days = workitem.payload['number_of_days']
+    logging("search phrase is ::::: ",search_phrase)
 
     # config_data = read_config('config.json')
     # search_phrase = config_data['search_phrase']
