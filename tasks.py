@@ -20,20 +20,14 @@ from robocorp import workitems
 from config_reader import read_config
 from web_scraper import scrape_articles
 from robocorp  import workitems
+from driver import drivers
 
 
 @task
 def otomatika():
-    options = Options()
-    options.add_argument("--headless")
-    options.add_argument("--no-sandbox")
-
-    # # # # Use the pre-installed ChromeDriver in the Docker image
-    service = Service(executable_path="/usr/bin/chromedriver")
-    driver = webdriver.Chrome(service=service, options=options)
-    # service = Service(executable_path="chromedriver.exe")
-    # driver = webdriver.Chrome(service=service)
-
+    
+    driver= drivers()
+    
     logging.info("Started")
 
     workitem = workitems.inputs.current
