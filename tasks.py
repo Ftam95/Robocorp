@@ -19,7 +19,7 @@ from robocorp.tasks import task
 from robocorp import workitems
 from config_reader import read_config
 from web_scraper import scrape_articles
-from RPA.Robocorp.WorkItems import WorkItems
+from robocorp  import workitems
 
 
 @task
@@ -36,9 +36,7 @@ def otomatika():
 
     logging.info("Started")
 
-    workitems = WorkItems()
-
-    workitem = workitems.load_work_item_by_id(workitems.current_work_item)
+    workitem = workitems.inputs.current
 
     # Use the work item in the current task
     config_data = workitem['payload']['input']
