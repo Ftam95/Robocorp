@@ -38,11 +38,23 @@ def otomatika():
 
     workitem = workitems.inputs.current
 
+    config_data = workitem.payload.get('input')  # Accessing the 'input' key within the payload
+
+# Checking if config_data is None (if 'input' key is not present)
+    if config_data is None:
+        print("Input data not found in payload.")
+    else:
+    # Accessing the data within 'input' dictionary
+        logging.info("config data is >>>>>>>",config_data)
+        search_phrase = config_data.get('search_phrase')
+        news_category = config_data.get('news_category')
+        number_of_months = config_data.get('number_of_months')
+
     # Use the work item in the current task
-    config_data = workitem.payload['input']
-    search_phrase = config_data['search_phrase']
-    news_category = config_data['news_category']
-    number_of_months = config_data['number_of_months']
+    # config_data = workitem.payload['input']
+    # search_phrase = config_data['search_phrase']
+    # news_category = config_data['news_category']
+    # number_of_months = config_data['number_of_months']
 
     print("search phrase is >>>>>>>"+search_phrase)
 
