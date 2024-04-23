@@ -19,7 +19,7 @@ from robocorp.tasks import task
 from robocorp import workitems
 from config_reader import read_config
 from web_scraper import scrape_articles
-from robocorp.workitems import WorkItems
+from RPA.Robocorp.WorkItems import WorkItems
 
 
 @task
