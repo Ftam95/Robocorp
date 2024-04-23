@@ -28,7 +28,7 @@ def otomatika():
     options.add_argument("--headless")
     options.add_argument("--no-sandbox")
 
-#     # # # # Use the pre-installed ChromeDriver in the Docker image
+    # # # # Use the pre-installed ChromeDriver in the Docker image
     service = Service(executable_path="/usr/bin/chromedriver")
     driver = webdriver.Chrome(service=service, options=options)
     # service = Service(executable_path="chromedriver.exe")
@@ -38,16 +38,14 @@ def otomatika():
 
     workitem = workitems.inputs.current
 
-    # Use the work item in the current task
-    # config_data = workitem["payload"]["input"]
+    search_phrase =workitem.payload['search_phrase']
+    number_of_days = workitem.payload['search_phrase']
+    logging("search phrase is >>>>>>>"+search_phrase)
+
+    # config_data = read_config('config.json')
     # search_phrase = config_data['search_phrase']
     # news_category = config_data['news_category']
-    # number_of_months = config_data['number_of_months']
-
-    search_phrase =workitem.payload['search_phrase']
-
-
-    print("search phrase is >>>>>>>"+search_phrase)
+    # number_of_days = config_data['number_of_days']
 
 
     folder_Download = r"output"
@@ -56,11 +54,6 @@ def otomatika():
 
     driver.get("https://www.latimes.com/")
     driver.set_window_size(1920, 1080)
-
-    # config_data = read_config('config.json')
-    # search_phrase = config_data['search_phrase']
-    # news_category = config_data['news_category']
-    # number_of_months = config_data['number_of_months']
 
     articles_data = scrape_articles(driver, search_phrase, folder_Download)
 

@@ -38,7 +38,7 @@ def scrape_articles(driver, search_phrase, folder_Download):
     input_element.send_keys(search_phrase + Keys.ENTER)
 
     newest_option = (driver.find_element(By.XPATH, "//option[@value='1']"))  # Assuming '1' is for "Newest"
-#   newest_option.click()
+    newest_option.click()
 
     time.sleep(10)
 
