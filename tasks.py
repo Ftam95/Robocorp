@@ -36,7 +36,7 @@ def otomatika():
 
     logging.info("Started")
 
-    workitem = workitems.inputs.current
+    workitem = workitems.inputs.current.to_dict()
 
     # Use the work item in the current task
     config_data = workitem['payload']['input']
