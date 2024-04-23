@@ -1,9 +1,9 @@
 import json
 
-# def read_config(configfile):
-#     with open(configfile, 'r') as config_file:
-#         data = json.load(config_file)
-#     return data
+def read_config(configfile):
+     with open(configfile, 'r') as config_file:
+         data = json.load(config_file)
+     return data
 
 
 from RPA.Robocorp.WorkItems import WorkItems
@@ -13,6 +13,7 @@ from RPA.Robocorp.WorkItems import WorkItems
 def read_config():
     # Initialize the Work Items library
     workitems = WorkItems()
+    print("work items >>>>")
 
     # Load the current Work Item
     work_item = workitems.get_work_item_payload()
